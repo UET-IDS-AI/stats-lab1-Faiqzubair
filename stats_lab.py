@@ -61,27 +61,44 @@ def sample_variance(data):
 # Question 3 – Order Statistics
 # -----------------------------------
 
+
 def order_statistics(data):
     data = np.array(data)
     data = np.sort(data)  
     
     n = len(data)
-    min = data[0]
-    max = data[-1]
-    median = np.median(data)
+    min = int(data[0])
+    max= int(data[-1])
     
+    # Full median
+    if n % 2 == 1:
+        median = int(data[n // 2])
+    else:
+        median = (data[n//2 - 1] + data[n//2]) / 2  
+    
+    # Split halves
     if n % 2 == 0:
         lower_half = data[:n//2]
         upper_half = data[n//2:]
     else:
-        lower_half = data[:n//2]      
-        upper_half = data[n//2 + 1:]   
+        lower_half = data[:n//2]     
+        upper_half = data[n//2 + 1:] 
     
-    q1 = np.median(lower_half)
-    q3 = np.median(upper_half)
+    # Q1
+    lh_len = len(lower_half)
+    if lh_len % 2 == 1:
+        q1 = int(lower_half[lh_len // 2])
+    else:
+        q1 = int(lower_half[lh_len // 2])  
     
-    return (min, max, median, q1, q3)
-
+    # Q3
+    uh_len = len(upper_half)
+    if uh_len % 2 == 1:
+        q3 = int(upper_half[uh_len // 2])
+    else:
+        q3 = int(upper_half[uh_len // 2])  
+    
+    return min, max, median, q1, q3
 
 # -----------------------------------
 # Question 4 – Sample Covariance
