@@ -7,48 +7,54 @@ import matplotlib.pyplot as plt
 # -----------------------------------
 
 def normal_histogram(n):
-    """
-    Generate n samples from Normal(0,1),
-    plot a histogram with 10 bins (with labels + title),
-    and return the generated data.
-    """
-    pass
+    data=no.random.normal(0,1,n)
+    plt.hist(data,bins=10,color="black",edgecolor="red")
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")
+    plt.show()
+
+    return data
 
 
 def uniform_histogram(n):
-    """
-    Generate n samples from Uniform(0,10),
-    plot a histogram with 10 bins (with labels + title),
-    and return the generated data.
-    """
-    pass
+    data=np.random.uniform(0,10,n)
+    plt.hist(data, bins=10)
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")
+    plt.title("Histogram of Uniform(0,10)")
+    plt.show()
+
+    return data
 
 
 def bernoulli_histogram(n):
-    """
-    Generate n samples from Bernoulli(0.5),
-    plot a histogram with 10 bins (with labels + title),
-    and return the generated data.
-    """
-    pass
+    data = np.random.binomial(1, 0.5, n)
+    plt.hist(data, bins=10)
+    plt.xlabel("Value (0 or 1)")
+    plt.ylabel("Frequency")
+    plt.title("Histogram of Bernoulli(0.5)")
+    plt.show()
 
+    return data
 
 # -----------------------------------
 # Question 2 – Sample Mean & Variance
 # -----------------------------------
 
 def sample_mean(data):
-    """
-    Compute sample mean.
-    """
-    pass
+    data = np.array(data)
+    return np.sum(data) / len(data)
 
 
 def sample_variance(data):
-    """
-    Compute sample variance using n-1 denominator.
-    """
-    pass
+    data = np.array(data)
+    n = len(data)
+    
+    mean = sample_mean(data)
+    squared_diff = (data - mean) ** 2
+    variance = np.sum(squared_diff) / (n - 1)
+    
+    return variance
 
 
 # -----------------------------------
@@ -56,18 +62,25 @@ def sample_variance(data):
 # -----------------------------------
 
 def order_statistics(data):
-    """
-    Return:
-    - min
-    - max
-    - median
-    - 25th percentile (Q1)
-    - 75th percentile (Q3)
-
-    Use a consistent quartile definition. The tests for the fixed
-    dataset [5,1,3,2,4] expect Q1=2 and Q3=4.
-    """
-    pass
+    data = np.array(data)
+    data = np.sort(data)  
+    
+    n = len(data)
+    min = data[0]
+    max = data[-1]
+    median = np.median(data)
+    
+    if n % 2 == 0:
+        lower_half = data[:n//2]
+        upper_half = data[n//2:]
+    else:
+        lower_half = data[:n//2]      
+        upper_half = data[n//2 + 1:]   
+    
+    q1 = np.median(lower_half)
+    q3 = np.median(upper_half)
+    
+    return (min, max, median, q1, q3)
 
 
 # -----------------------------------
@@ -75,20 +88,37 @@ def order_statistics(data):
 # -----------------------------------
 
 def sample_covariance(x, y):
-    """
-    Compute sample covariance using n-1 denominator.
-    """
-    pass
 
+    x = np.array(x)
+    y = np.array(y)
+    n = len(x)
+    
+    mean_x = np.sum(x) / n
+    mean_y = np.sum(y) / n
+    
+    cov = np.sum((x - mean_x) * (y - mean_y)) / (n - 1)
+    
+    return cov
 
 # -----------------------------------
 # Question 5 – Covariance Matrix
 # -----------------------------------
 
 def covariance_matrix(x, y):
-    """
-    Return 2x2 covariance matrix:
-        [[var(x), cov(x,y)],
-         [cov(x,y), var(y)]]
-    """
-    pass
+
+    x = np.array(x)
+    y = np.array(y)
+    
+    # Sample variances
+    var_x = sample_variance(x)
+    var_y = sample_variance(y)
+    
+    # Sample covariance
+    cov_xy = sample_covariance(x, y)
+    
+    # Build 2x2 covariance matrix
+    cov_matrix = np.array([[var_x, cov_xy],
+                           [cov_xy, var_y]])
+    
+    return cov_matrix
+
